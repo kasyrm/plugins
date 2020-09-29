@@ -68,7 +68,6 @@ static const int SOURCE_GALLERY = 1;
 
   if ([@"pickImage" isEqualToString:call.method]) {
     _imagePickerController = [[UIImagePickerController alloc] init];
-    _imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
     _imagePickerController.delegate = self;
     _imagePickerController.mediaTypes = @[ (NSString *)kUTTypeImage ];
 
@@ -79,6 +78,7 @@ static const int SOURCE_GALLERY = 1;
 
     switch (imageSource) {
       case SOURCE_CAMERA: {
+        _imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
         NSInteger cameraDevice = [[_arguments objectForKey:@"cameraDevice"] intValue];
         _device = (cameraDevice == 1) ? UIImagePickerControllerCameraDeviceFront
                                       : UIImagePickerControllerCameraDeviceRear;
@@ -86,6 +86,7 @@ static const int SOURCE_GALLERY = 1;
         break;
       }
       case SOURCE_GALLERY:
+        _imagePickerController.modalPresentationStyle = UIModalPresentationPopover;
         [self checkPhotoAuthorization];
         break;
       default:
@@ -96,7 +97,6 @@ static const int SOURCE_GALLERY = 1;
     }
   } else if ([@"pickVideo" isEqualToString:call.method]) {
     _imagePickerController = [[UIImagePickerController alloc] init];
-    _imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
     _imagePickerController.delegate = self;
     _imagePickerController.mediaTypes = @[
       (NSString *)kUTTypeMovie, (NSString *)kUTTypeAVIMovie, (NSString *)kUTTypeVideo,
@@ -115,9 +115,11 @@ static const int SOURCE_GALLERY = 1;
 
     switch (imageSource) {
       case SOURCE_CAMERA:
+        _imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
         [self checkCameraAuthorization];
         break;
       case SOURCE_GALLERY:
+          _imagePickerController.modalPresentationStyle = UIModalPresentationPopover;
         [self checkPhotoAuthorization];
         break;
       default:
